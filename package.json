@@ -1,7 +1,7 @@
 {
-  "name": "com.erlend-eiken-oppedal.extentionmethods",
+  "name": "com.erlend-eiken-oppedal.extensionmethods",
   "version": "1.0.0",
-  "displayName": "Extention Methods",
+  "displayName": "Extension Methods",
   "author": {
     "name": "Erlend Eiken Oppedal",
     "email": "erlend.oppedal@gmail.com"
