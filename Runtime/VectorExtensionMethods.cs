@@ -20,11 +20,17 @@ namespace ExtensionMethods {
         /// <param name="x">Sets the value of the X-axis</param>
         /// <param name="y">Sets the value of the Y-axis</param>
         /// <param name="z">Sets the value of the Z-axis</param>
-        public static Vector3 With(this Vector3 vector3, float? x = null, float? y = null, float? z = null) {
+        public static Vector3 With(this ref Vector3 vector3, float? x = null, float? y = null, float? z = null) {
             if (x.HasValue) vector3.x = x.Value;
             if (y.HasValue) vector3.y = y.Value;
             if (z.HasValue) vector3.z = z.Value;
             return vector3;
+        }
+        
+        public static void Set(this ref Vector3 vector3, float? x = null, float? y = null, float? z = null) {
+            if (x.HasValue) vector3.x = x.Value;
+            if (y.HasValue) vector3.y = y.Value;
+            if (z.HasValue) vector3.z = z.Value;
         }
 
         #endregion

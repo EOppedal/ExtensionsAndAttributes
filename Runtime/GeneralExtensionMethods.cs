@@ -35,16 +35,15 @@ namespace ExtensionMethods {
         /// Returns a random element from the list or array.
         /// </summary>
         public static T GetRandom<T>(this IReadOnlyList<T> list) {
-            var random = new System.Random();
-            return list[random.Next(0, list.Count)];
+            return list[new Random().Next(0, list.Count)];
         }
 
         public static void Shuffle<T>(this IList<T> list) {
-            var n = list.Count;
-            while (n > 1) {
-                n--;
-                var k = new Random().Next(n + 1);
-                (list[k], list[n]) = (list[n], list[k]);
+            var i = list.Count;
+            while (i > 1) {
+                i--;
+                var k = new Random().Next(i + 1);
+                (list[k], list[i]) = (list[i], list[k]);
             }
         }
 
