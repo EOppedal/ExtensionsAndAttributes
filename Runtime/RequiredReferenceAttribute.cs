@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-
 #if UNITY_EDITOR
 using UnityEditor;
 using System.Reflection;
@@ -21,9 +20,6 @@ namespace ExtensionMethods {
             foreach (var field in fields) {
                 var attributes = field.GetCustomAttributes(typeof(RequiredReferenceAttribute), true);
                 if (attributes.Length <= 0) continue;
-
-                var isSerialized = field.IsPublic || Attribute.IsDefined(field, typeof(SerializeField));
-                if (isSerialized) continue;
 
                 var valueToAssign = ((MonoBehaviour)target).GetOrAdd(field.FieldType);
                 field.SetValue(target, valueToAssign);
