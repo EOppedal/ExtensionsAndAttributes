@@ -47,6 +47,19 @@ namespace ExtensionMethods {
             }
         }
 
+        public static T GetOrAdd<T>(this MonoBehaviour monoBehaviour, T componentParam = null) where T : Component {
+            return monoBehaviour.TryGetComponent<T>(out var component) ? component 
+                : monoBehaviour.gameObject.AddComponent<T>();
+        }
+        
+        public static Component GetOrAdd(this MonoBehaviour monoBehaviour, Type componentType) {
+            var component = monoBehaviour.GetComponent(componentType);
+            if (component == null) {
+                component = monoBehaviour.gameObject.AddComponent(componentType);
+            }
+            return component;
+        }
+
         /// <summary>
         /// Returns the current animation clip being played by the Animator
         /// </summary>
