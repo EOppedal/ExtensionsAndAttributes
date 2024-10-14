@@ -1,6 +1,6 @@
 {
-    "name": "ExtensionMethods",
-    "rootNamespace": "ExtensionMethods",
+    "name": "ExtensionsAndAttributes",
+    "rootNamespace": "",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
