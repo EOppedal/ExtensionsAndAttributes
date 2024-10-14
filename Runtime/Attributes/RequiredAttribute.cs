@@ -6,7 +6,7 @@ using UnityEditor;
 
 namespace Attributes {
     [AttributeUsage(AttributeTargets.Field)]
-    public class RequiredAttribute : PropertyAttribute {
+    public class RequiredAttribute : PropertyAttribute, IMustBeSerialized {
     }
 
 #if UNITY_EDITOR
