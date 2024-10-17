@@ -16,8 +16,10 @@ namespace Attributes {
         }
 
         private static void GetOrAddRequiredReference(Editor editor, FieldInfo field) {
-            var valueToAssign = ((MonoBehaviour)editor.target).GetOrAdd(field.FieldType);
-            field.SetValue(editor.target, valueToAssign);
+            var target = editor.target;
+            var valueToAssign = ((MonoBehaviour)target).GetOrAdd(field.FieldType);
+            field.SetValue(target, valueToAssign);
+            EditorUtility.SetDirty(target);
         }
 #endif
     }
