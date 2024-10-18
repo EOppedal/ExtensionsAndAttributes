@@ -19,7 +19,7 @@ namespace Attributes {
             
             position.y += EditorGUIUtility.singleLineHeight;
             GUILayout.Space(EditorGUIUtility.singleLineHeight);
-            EditorGUI.HelpBox(position, $"Field: '{property.name}' requires a valid reference or value!", MessageType.Warning);
+            EditorGUI.HelpBox(position, $"Field: '{property.name}' requires a reference or value!", MessageType.Warning);
         }
         
         private static bool IsValueNullOrEmpty(SerializedProperty property) {
