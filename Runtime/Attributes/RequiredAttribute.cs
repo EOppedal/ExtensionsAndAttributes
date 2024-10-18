@@ -17,7 +17,7 @@ namespace Attributes {
 
             var targetType = property.serializedObject.targetObject.GetType();
 
-            if (targetType == typeof(string) && !string.IsNullOrWhiteSpace(property.stringValue)) {
+            if (targetType == typeof(string) && string.IsNullOrWhiteSpace(property.stringValue)) {
                 DrawRequiredField(position, property);
                 return;
             }
