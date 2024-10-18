@@ -17,13 +17,21 @@ namespace Attributes {
 
             var targetType = property.serializedObject.targetObject.GetType();
 
-            if (targetType == typeof(string) && !string.IsNullOrWhiteSpace(property.stringValue)) return;
-            if (property.objectReferenceValue != null) return;
+            if (targetType == typeof(string) && !string.IsNullOrWhiteSpace(property.stringValue)) {
+                DrawRequiredField(position, property);
+                return;
+            }
 
+            if (property.objectReferenceValue != null) {
+                DrawRequiredField(position, property);
+                return;
+            }
+        }
+
+        private static void DrawRequiredField(Rect position, SerializedProperty property) {
             position.y += EditorGUIUtility.singleLineHeight;
             EditorGUI.HelpBox(position, $"Field: '{property.name}' requires a valid reference!", MessageType.Warning);
         }
     }
-
 #endif
 }
