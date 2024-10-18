@@ -14,23 +14,21 @@ namespace Attributes {
     public class RequiredDrawer : PropertyDrawer {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
             EditorGUI.PropertyField(position, property, label);
-
-            var targetType = property.serializedObject.targetObject.GetType();
-
-            if (targetType == typeof(string) && string.IsNullOrWhiteSpace(property.stringValue)) {
-                DrawRequiredField(position, property);
-                return;
-            }
-
-            if (property.objectReferenceValue != null) {
-                DrawRequiredField(position, property);
-                return;
-            }
-        }
-
-        private static void DrawRequiredField(Rect position, SerializedProperty property) {
+            
+            if (!IsValueNullOrEmpty(property)) return;
+            
             position.y += EditorGUIUtility.singleLineHeight;
-            EditorGUI.HelpBox(position, $"Field: '{property.name}' requires a valid reference!", MessageType.Warning);
+            GUILayout.Space(EditorGUIUtility.singleLineHeight);
+            EditorGUI.HelpBox(position, $"Field: '{property.name}' requires a valid reference o value!", MessageType.Warning);
+        }
+        
+        private static bool IsValueNullOrEmpty(SerializedProperty property) {
+            return property.propertyType switch {
+                SerializedPropertyType.ObjectReference => property.objectReferenceValue == null,
+                SerializedPropertyType.String => string.IsNullOrEmpty(property.stringValue),
+                SerializedPropertyType.ArraySize => property.arraySize == 0,
+                _ => false
+            };
         }
     }
 #endif
