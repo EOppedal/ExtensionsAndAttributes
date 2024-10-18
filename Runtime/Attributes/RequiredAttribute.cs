@@ -15,10 +15,15 @@ namespace Attributes {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
             EditorGUI.PropertyField(position, property, label);
 
+            var targetType = property.serializedObject.targetObject.GetType();
+
+            if (targetType == typeof(string) && !string.IsNullOrWhiteSpace(property.stringValue)) return;
             if (property.objectReferenceValue != null) return;
 
-            EditorGUILayout.HelpBox($"Field: '{property.name}' requires a reference!", MessageType.Warning);
+            position.y += EditorGUIUtility.singleLineHeight;
+            EditorGUI.HelpBox(position, $"Field: '{property.name}' requires a valid reference!", MessageType.Warning);
         }
     }
+
 #endif
 }
