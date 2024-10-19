@@ -8,11 +8,11 @@ using UnityEngine;
 
 namespace Attributes {
     [AttributeUsage(AttributeTargets.Field)]
-    public class RequiredReferenceAttribute : Attribute {
+    public class GetOrAddComponentAttribute : Attribute {
 #if UNITY_EDITOR
         [InitializeOnLoadMethod]
         private static void AddToMonobehaviourEditor() {
-            MonoBehaviourEditor.OnInspectorGUIAttributes.Add(typeof(RequiredReferenceAttribute), GetOrAddRequiredReference);
+            MonoBehaviourEditor.OnInspectorGUIAttributes.Add(typeof(GetOrAddComponentAttribute), GetOrAddRequiredReference);
         }
 
         private static void GetOrAddRequiredReference(Editor editor, FieldInfo field) {
