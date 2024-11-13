@@ -14,7 +14,7 @@ namespace Attributes {
     [AttributeUsage(AttributeTargets.Field)]
     public class ResetFieldOnExitPlayModeAttribute : PropertyAttribute {
     }
-    
+
     /// <summary>
     /// Only works on ScriptableObjects
     /// </summary>
@@ -64,6 +64,7 @@ namespace Attributes {
         private static void RestoreInitialState() {
             foreach (var (scriptableObject, value) in InitialState) {
                 foreach (var (fieldInfo, originalValue) in value) {
+                    fieldInfo.SetValue(scriptableObject, default);
                     fieldInfo.SetValue(scriptableObject, originalValue);
                 }
 
@@ -71,6 +72,8 @@ namespace Attributes {
             }
 
             Debug.Log("Restore Initial State | script count: " + InitialState.Count);
+
+            InitialState.Clear();
         }
 
         private static IEnumerable<(ScriptableObject target, FieldInfo field)> GetAllResetFieldsOnExitPlayModeFields() {

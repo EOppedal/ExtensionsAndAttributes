@@ -27,6 +27,7 @@ namespace Attributes {
                 SerializedPropertyType.ObjectReference => property.objectReferenceValue == null,
                 SerializedPropertyType.String => string.IsNullOrEmpty(property.stringValue),
                 SerializedPropertyType.ArraySize => property.arraySize == 0,
+                SerializedPropertyType.AnimationCurve => property.animationCurveValue.length !> 0,
                 _ => false
             };
         }
