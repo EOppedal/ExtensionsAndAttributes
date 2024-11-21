@@ -7,6 +7,9 @@ using UnityEngine;
 #endif
 
 namespace Attributes {
+    /// <summary>
+    /// Must be accompanied by [SerializeField], but can still be hidden by [HideInInspector]
+    /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
     public class GetOrAddComponentAttribute : Attribute, IMustBeSerialized {
 #if UNITY_EDITOR
