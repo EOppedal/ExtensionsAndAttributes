@@ -40,6 +40,7 @@ namespace Attributes {
                     RestoreInitialState();
                     break;
                 case PlayModeStateChange.EnteredEditMode:
+                    break;
                 case PlayModeStateChange.ExitingEditMode:
                     break;
                 default:

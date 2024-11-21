@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Attributes {
     [AttributeUsage(AttributeTargets.Field)]
-    public class GetOrAddComponentAttribute : Attribute {
+    public class GetOrAddComponentAttribute : Attribute, IMustBeSerialized {
 #if UNITY_EDITOR
         [InitializeOnLoadMethod]
         private static void AddToMonobehaviourEditor() {
