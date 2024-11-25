@@ -9,14 +9,14 @@ using UnityEditor;
 
 namespace Attributes {
     /// <summary>
-    /// Only works on Fields in a ScriptableObject
+    /// Only works on Fields in a ScriptableObject in the 'Resources' folder
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
     public class ResetFieldOnExitPlayModeAttribute : PropertyAttribute {
     }
 
     /// <summary>
-    /// Only works on ScriptableObjects
+    /// Only works on ScriptableObjects in the 'Resources' folder
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class ResetFieldsOnExitPlayModeAttribute : PropertyAttribute {
@@ -24,6 +24,8 @@ namespace Attributes {
 
 #if UNITY_EDITOR
     [InitializeOnLoad] public static class ResetOnExitPlayModeHandler {
+        private static readonly string LogPrefix = $"[{nameof(ResetFieldOnExitPlayModeAttribute)}]"; 
+        
         private static readonly Dictionary<ScriptableObject, List<(FieldInfo fieldInfo, object fieldValue)>>
             InitialState = new();
 
@@ -40,7 +42,6 @@ namespace Attributes {
                     RestoreInitialState();
                     break;
                 case PlayModeStateChange.EnteredEditMode:
-                    break;
                 case PlayModeStateChange.ExitingEditMode:
                     break;
                 default:
@@ -59,7 +60,7 @@ namespace Attributes {
                 InitialState[scriptableObject].Add((field, field.GetValue(scriptableObject)));
             }
 
-            Debug.Log("Save Initial State | script count: " + InitialState.Count);
+            Debug.Log(LogPrefix + "Save Initial State | script count: " + InitialState.Count);
         }
 
         private static void RestoreInitialState() {
@@ -72,7 +73,7 @@ namespace Attributes {
                 EditorUtility.SetDirty(scriptableObject);
             }
 
-            Debug.Log("Restore Initial State | script count: " + InitialState.Count);
+            Debug.Log(LogPrefix + " Restore Initial State | script count:" + InitialState.Count);
 
             InitialState.Clear();
         }
@@ -98,11 +99,13 @@ namespace Attributes {
         }
 
         private static ScriptableObject[] GetAllScriptableObjects() {
-            var assetGuids = AssetDatabase.FindAssets("t:ScriptableObject");
-            return assetGuids
-                .Select(AssetDatabase.GUIDToAssetPath)
-                .Select(AssetDatabase.LoadAssetAtPath<ScriptableObject>)
-                .ToArray();
+            return Resources.FindObjectsOfTypeAll<ScriptableObject>();
+            
+            // var assetGuids = AssetDatabase.FindAssets("t:ScriptableObject");
+            // return assetGuids
+            //     .Select(AssetDatabase.GUIDToAssetPath)
+            //     .Select(AssetDatabase.LoadAssetAtPath<ScriptableObject>)
+            //     .ToArray();
         }
     }
 #endif
