@@ -24,10 +24,38 @@ namespace Attributes {
 
 #if UNITY_EDITOR
     [InitializeOnLoad] public static class ResetOnExitPlayModeHandler {
-        private static readonly string LogPrefix = $"[{nameof(ResetFieldOnExitPlayModeAttribute)}]"; 
-        
-        private static readonly Dictionary<ScriptableObject, List<(FieldInfo fieldInfo, object fieldValue)>>
-            InitialState = new();
+        private const string SOPath =
+            "Packages/com.erlend-eiken-oppedal.extensionsandattributes/Runtime/Attributes/ResetFieldOnExitPlayModeInitialStateSO.asset";
+
+        private static ResetFieldOnExitPlayModeAttributeSO ResetFieldSO {
+            get {
+                if (_resetFieldSO == null) {
+                    _resetFieldSO = AssetDatabase.LoadAssetAtPath<ResetFieldOnExitPlayModeAttributeSO>(SOPath);
+
+#if UNITY_EDITOR
+                    if (_resetFieldSO == null) {
+                        var so = ScriptableObject.CreateInstance<ResetFieldOnExitPlayModeAttributeSO>();
+
+                        AssetDatabase.CreateAsset(so, SOPath);
+
+                        _resetFieldSO = so;
+                        Debug.Log($"{nameof(ResetFieldOnExitPlayModeAttributeSO)} file created");
+                    }
+#endif
+
+                    Debug.Log($"{nameof(ResetFieldOnExitPlayModeAttributeSO)} loaded manually");
+                }
+
+                return _resetFieldSO;
+            }
+        }
+
+        private static ResetFieldOnExitPlayModeAttributeSO _resetFieldSO;
+
+        private static readonly string LogPrefix = $"[{nameof(ResetFieldOnExitPlayModeAttribute)}]";
+
+        private static Dictionary<ScriptableObject, List<(FieldInfo fieldInfo, object fieldValue)>>
+            InitialState => ResetFieldSO.InitialState;
 
         static ResetOnExitPlayModeHandler() {
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
@@ -100,7 +128,7 @@ namespace Attributes {
 
         private static ScriptableObject[] GetAllScriptableObjects() {
             return Resources.FindObjectsOfTypeAll<ScriptableObject>();
-            
+
             // var assetGuids = AssetDatabase.FindAssets("t:ScriptableObject");
             // return assetGuids
             //     .Select(AssetDatabase.GUIDToAssetPath)
