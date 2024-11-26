@@ -7,6 +7,7 @@
     "email": "erlend.oppedal@gmail.com"
   },
   "dependencies": {
-    "com.unity.inputsystem": ""
+    "com.unity.inputsystem": "",
+    "ayellowpaper.serialized-dictionary": "https://github.com/ayellowpaper/SerializedDictionary.git"
   }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 #if UNITY_EDITOR
+using AYellowpaper.SerializedCollections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -24,6 +25,7 @@ namespace Attributes {
 
 #if UNITY_EDITOR
     [InitializeOnLoad] public static class ResetOnExitPlayModeHandler {
+        #region ---Fields---
         private const string SOPath =
             "Packages/com.erlend-eiken-oppedal.extensionsandattributes/Runtime/Attributes/ResetFieldOnExitPlayModeInitialStateSO.asset";
 
@@ -52,8 +54,9 @@ namespace Attributes {
 
         private static readonly string LogPrefix = $"[{nameof(ResetFieldOnExitPlayModeAttribute)}]";
 
-        private static Dictionary<ScriptableObject, List<(FieldInfo fieldInfo, object fieldValue)>>
+        private static SerializedDictionary<ScriptableObject, List<(FieldInfo fieldInfo, object fieldValue)>>
             InitialState => ResetFieldSO.InitialState;
+        #endregion
 
         static ResetOnExitPlayModeHandler() {
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
