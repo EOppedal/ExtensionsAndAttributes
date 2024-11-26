@@ -29,22 +29,20 @@ namespace Attributes {
 
         private static ResetFieldOnExitPlayModeAttributeSO ResetFieldSO {
             get {
+                if (_resetFieldSO != null) return _resetFieldSO;
+                
+                _resetFieldSO = AssetDatabase.LoadAssetAtPath<ResetFieldOnExitPlayModeAttributeSO>(SOPath);
+
                 if (_resetFieldSO == null) {
-                    _resetFieldSO = AssetDatabase.LoadAssetAtPath<ResetFieldOnExitPlayModeAttributeSO>(SOPath);
+                    var so = ScriptableObject.CreateInstance<ResetFieldOnExitPlayModeAttributeSO>();
 
-#if UNITY_EDITOR
-                    if (_resetFieldSO == null) {
-                        var so = ScriptableObject.CreateInstance<ResetFieldOnExitPlayModeAttributeSO>();
+                    AssetDatabase.CreateAsset(so, SOPath);
 
-                        AssetDatabase.CreateAsset(so, SOPath);
-
-                        _resetFieldSO = so;
-                        Debug.Log($"{nameof(ResetFieldOnExitPlayModeAttributeSO)} file created");
-                    }
-#endif
-
-                    Debug.Log($"{nameof(ResetFieldOnExitPlayModeAttributeSO)} loaded manually");
+                    _resetFieldSO = so;
+                    Debug.Log($"{nameof(ResetFieldOnExitPlayModeAttributeSO)} file created");
                 }
+
+                Debug.Log($"{nameof(ResetFieldOnExitPlayModeAttributeSO)} loaded manually");
 
                 return _resetFieldSO;
             }
