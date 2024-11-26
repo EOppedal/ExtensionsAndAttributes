@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 #if UNITY_EDITOR
-using AYellowpaper.SerializedCollections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -32,7 +31,7 @@ namespace Attributes {
         private static ResetFieldOnExitPlayModeAttributeSO ResetFieldSO {
             get {
                 if (_resetFieldSO != null) return _resetFieldSO;
-                
+
                 _resetFieldSO = AssetDatabase.LoadAssetAtPath<ResetFieldOnExitPlayModeAttributeSO>(SOPath);
 
                 if (_resetFieldSO == null) {
@@ -53,9 +52,6 @@ namespace Attributes {
         private static ResetFieldOnExitPlayModeAttributeSO _resetFieldSO;
 
         private static readonly string LogPrefix = $"[{nameof(ResetFieldOnExitPlayModeAttribute)}]";
-
-        private static SerializedDictionary<ScriptableObject, List<(FieldInfo fieldInfo, object fieldValue)>>
-            InitialState => ResetFieldSO.InitialState;
         #endregion
 
         static ResetOnExitPlayModeHandler() {
@@ -79,32 +75,33 @@ namespace Attributes {
         }
 
         private static void SaveInitialState() {
-            InitialState.Clear();
+            ResetFieldSO.InitialState.Clear();
 
             foreach (var (scriptableObject, field) in GetAllResetFieldsOnExitPlayModeFields()) {
-                if (!InitialState.ContainsKey(scriptableObject)) {
-                    InitialState[scriptableObject] = new List<(FieldInfo, object)>();
+                if (!ResetFieldSO.InitialState.ContainsKey(scriptableObject)) {
+                    ResetFieldSO.InitialState[scriptableObject] = new List<ScriptableObjectFields>();
                 }
 
-                InitialState[scriptableObject].Add((field, field.GetValue(scriptableObject)));
+                ResetFieldSO.InitialState[scriptableObject]
+                    .Add(new ScriptableObjectFields(field, field.GetValue(scriptableObject)));
             }
 
-            Debug.Log(LogPrefix + "Save Initial State | script count: " + InitialState.Count);
+            Debug.Log(LogPrefix + "Save Initial State | script count: " + ResetFieldSO.InitialState.Count);
         }
 
         private static void RestoreInitialState() {
-            foreach (var (scriptableObject, value) in InitialState) {
-                foreach (var (fieldInfo, originalValue) in value) {
-                    fieldInfo.SetValue(scriptableObject, default);
-                    fieldInfo.SetValue(scriptableObject, originalValue);
+            foreach (var (scriptableObject, value) in ResetFieldSO.InitialState) {
+                foreach (var objectFields in value) {
+                    objectFields.FieldInfo.SetValue(scriptableObject, default);
+                    objectFields.FieldInfo.SetValue(scriptableObject, objectFields.FieldValue);
                 }
 
                 EditorUtility.SetDirty(scriptableObject);
             }
 
-            Debug.Log(LogPrefix + " Restore Initial State | script count:" + InitialState.Count);
+            Debug.Log(LogPrefix + " Restore Initial State | script count:" + ResetFieldSO.InitialState.Count);
 
-            InitialState.Clear();
+            ResetFieldSO.InitialState.Clear();
         }
 
         private static IEnumerable<(ScriptableObject target, FieldInfo field)> GetAllResetFieldsOnExitPlayModeFields() {
