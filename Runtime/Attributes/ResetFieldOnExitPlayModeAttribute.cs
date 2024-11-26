@@ -85,6 +85,8 @@ namespace Attributes {
 
                 ResetFieldSO.InitialState[scriptableObject]
                     .Add(new ScriptableObjectFields(field, field.GetValue(scriptableObject)));
+                
+                Debug.Log(field.GetValue(scriptableObject));
             }
 
             Debug.Log(LogPrefix + "Save Initial State | script count: " + ResetFieldSO.InitialState.Count);
@@ -95,6 +97,7 @@ namespace Attributes {
                 foreach (var objectFields in value) {
                     objectFields.FieldInfo.SetValue(scriptableObject, default);
                     objectFields.FieldInfo.SetValue(scriptableObject, objectFields.FieldValue);
+                    Debug.Log(objectFields.FieldValue);
                 }
 
                 EditorUtility.SetDirty(scriptableObject);
@@ -110,7 +113,7 @@ namespace Attributes {
 
             foreach (var scriptableObject in GetAllScriptableObjects()) {
                 var objType = scriptableObject.GetType();
-                var obj = scriptableObject.DeepClone();
+                var obj = scriptableObject.ShallowClone();
                 var hasClassAttribute = objType.GetCustomAttributes(typeof(ResetFieldsOnExitPlayModeAttribute), true).Any();
 
                 foreach (var field in objType.GetFields(bindingFlags)) {

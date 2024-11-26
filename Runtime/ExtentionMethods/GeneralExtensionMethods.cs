@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using Random = System.Random;
 
@@ -70,8 +71,17 @@ namespace ExtensionMethods {
         }
 
         public static T DeepClone<T>(this T source) {
-            var i = JsonUtility.ToJson(source, true);
-            return JsonUtility.FromJson<T>(i);
+            var json = JsonUtility.ToJson(source, true);
+            return JsonUtility.FromJson<T>(json);
+        }
+
+        public static T ShallowClone<T>(this T source) {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (typeof(T).IsValueType) return source;
+
+            const BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+
+            return (T)source.GetType().GetMethod("MemberwiseClone", bindingFlags)?.Invoke(source, null);
         }
     }
 }

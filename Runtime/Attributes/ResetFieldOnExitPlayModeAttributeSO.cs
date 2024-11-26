@@ -10,7 +10,7 @@ namespace Attributes {
         public SerializedDictionary<ScriptableObject, List<ScriptableObjectFields>> InitialState { get; set; } = new();
     }
     
-    [Serializable] public record ScriptableObjectFields {
+    [Serializable] public class ScriptableObjectFields {
         public FieldInfo FieldInfo;
         public object FieldValue;
 
