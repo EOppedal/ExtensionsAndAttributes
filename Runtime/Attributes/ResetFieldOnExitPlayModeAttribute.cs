@@ -1,4 +1,5 @@
 ﻿using System;
+using ExtensionMethods;
 using UnityEngine;
 #if UNITY_EDITOR
 using System.Collections.Generic;
@@ -107,20 +108,30 @@ namespace Attributes {
         private static IEnumerable<(ScriptableObject target, FieldInfo field)> GetAllResetFieldsOnExitPlayModeFields() {
             const BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
-            foreach (var obj in GetAllScriptableObjects()) {
-                var objType = obj.GetType();
+            foreach (var scriptableObject in GetAllScriptableObjects()) {
+                var objType = scriptableObject.GetType();
+                var obj = scriptableObject.DeepClone();
+                var hasClassAttribute = objType.GetCustomAttributes(typeof(ResetFieldsOnExitPlayModeAttribute), true).Any();
 
-                if (objType.GetCustomAttributes(typeof(ResetFieldsOnExitPlayModeAttribute), true).Any()) {
-                    foreach (var field in objType.GetFields(bindingFlags)) {
+                foreach (var field in objType.GetFields(bindingFlags)) {
+                    if (hasClassAttribute || field.GetCustomAttribute(typeof(ResetFieldOnExitPlayModeAttribute)) != null) {
                         yield return (obj, field);
                     }
                 }
-                else {
-                    foreach (var field in objType.GetFields(bindingFlags).Where(field =>
-                                 field.GetCustomAttribute(typeof(ResetFieldOnExitPlayModeAttribute)) != null)) {
-                        yield return (obj, field);
-                    }
-                }
+
+                // var objType = obj.GetType();
+                //
+                // if (objType.GetCustomAttributes(typeof(ResetFieldsOnExitPlayModeAttribute), true).Any()) {
+                //     foreach (var field in objType.GetFields(bindingFlags)) {
+                //         yield return (obj, field);
+                //     }
+                // }
+                // else {
+                //     foreach (var field in objType.GetFields(bindingFlags).Where(field =>
+                //                  field.GetCustomAttribute(typeof(ResetFieldOnExitPlayModeAttribute)) != null)) {
+                //         yield return (obj, field);
+                //     }
+                // }
             }
         }
 
