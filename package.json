@@ -8,6 +8,6 @@
   },
   "dependencies": {
     "com.unity.inputsystem": "",
-    "com.ayellowpaper.serialized-dictionary": "https://github.com/ayellowpaper/SerializedDictionary.git"
+    "ayellowpaper.serialized-dictionary": "https://github.com/ayellowpaper/SerializedDictionary.git"
   }
 }
