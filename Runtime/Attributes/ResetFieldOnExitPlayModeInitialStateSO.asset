@@ -12,3 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9854d26d1b747deb9d702aeb682066d, type: 3}
   m_Name: ResetFieldOnExitPlayModeInitialStateSO
   m_EditorClassIdentifier: 
+  <InitialState>k__BackingField:
+    _serializedList: []

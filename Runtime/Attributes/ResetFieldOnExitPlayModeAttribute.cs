@@ -2,10 +2,12 @@
 using ExtensionMethods;
 using UnityEngine;
 #if UNITY_EDITOR
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
+using UnityEngine.Assertions;
 #endif
 
 namespace Attributes {
@@ -83,10 +85,34 @@ namespace Attributes {
                     ResetFieldSO.InitialState[scriptableObject] = new List<ScriptableObjectFields>();
                 }
 
+                var fieldValue = field.GetValue(scriptableObject);
+
+                switch (fieldValue) {
+                    case ICloneable cloneableValue:
+                        fieldValue = cloneableValue.Clone();
+                        Debug.Log("cloneable ");
+                        break;
+                    case IList list:
+                        var elementType = list.GetType().GenericTypeArguments[0];
+                        var genericListType = typeof(List<>).MakeGenericType(elementType);
+                        var newList = (IList)Activator.CreateInstance(genericListType);
+                            
+                        Assert.AreNotEqual(list, newList);
+
+                        foreach (var item in list) {
+                            newList.Add(item);
+                        }
+                        
+                        fieldValue = newList;
+                        
+                        Debug.Log($"Cloned list of type {elementType} with {newList.Count} elements");
+                        break;
+                }
+
                 ResetFieldSO.InitialState[scriptableObject]
-                    .Add(new ScriptableObjectFields(field, field.GetValue(scriptableObject)));
-                
-                Debug.Log(field.GetValue(scriptableObject));
+                    .Add(new ScriptableObjectFields(field, fieldValue));
+
+                Debug.Log(fieldValue);
             }
 
             Debug.Log(LogPrefix + "Save Initial State | script count: " + ResetFieldSO.InitialState.Count);
@@ -95,7 +121,19 @@ namespace Attributes {
         private static void RestoreInitialState() {
             foreach (var (scriptableObject, value) in ResetFieldSO.InitialState) {
                 foreach (var objectFields in value) {
-                    objectFields.FieldInfo.SetValue(scriptableObject, default);
+                    var fieldValue = objectFields.FieldInfo.GetValue(scriptableObject);
+
+                    switch (fieldValue) {
+                        case IList list:
+                            list.Clear();
+
+                            foreach (var o in (IList)objectFields.FieldValue) {
+                                list.Add(o);
+                            }
+                            
+                            continue;
+                    }
+                    
                     objectFields.FieldInfo.SetValue(scriptableObject, objectFields.FieldValue);
                     Debug.Log(objectFields.FieldValue);
                 }
@@ -114,10 +152,12 @@ namespace Attributes {
             foreach (var scriptableObject in GetAllScriptableObjects()) {
                 var objType = scriptableObject.GetType();
                 var obj = scriptableObject.ShallowClone();
-                var hasClassAttribute = objType.GetCustomAttributes(typeof(ResetFieldsOnExitPlayModeAttribute), true).Any();
+                var hasClassAttribute =
+                    objType.GetCustomAttributes(typeof(ResetFieldsOnExitPlayModeAttribute), true).Any();
 
                 foreach (var field in objType.GetFields(bindingFlags)) {
-                    if (hasClassAttribute || field.GetCustomAttribute(typeof(ResetFieldOnExitPlayModeAttribute)) != null) {
+                    if (hasClassAttribute ||
+                        field.GetCustomAttribute(typeof(ResetFieldOnExitPlayModeAttribute)) != null) {
                         yield return (obj, field);
                     }
                 }
