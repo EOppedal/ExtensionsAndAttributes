@@ -144,6 +144,8 @@ namespace Attributes {
                             foreach (var o in (IList)objectFields.FieldValue) {
                                 list.Add(o);
                             }
+
+                            Debug.Log("restore list with " + list.Count);
                             
                             continue;
                     }
