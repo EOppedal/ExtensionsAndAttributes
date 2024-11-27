@@ -4,6 +4,7 @@ using UnityEngine;
 #if UNITY_EDITOR
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
@@ -28,23 +29,36 @@ namespace Attributes {
 #if UNITY_EDITOR
     [InitializeOnLoad] public static class ResetOnExitPlayModeHandler {
         #region ---Fields---
-        private const string SOPath =
-            "Packages/com.erlend-eiken-oppedal.extensionsandattributes/Runtime/Attributes/ResetFieldOnExitPlayModeInitialStateSO.asset";
+        private const string SOFolder = "ExtentionsAndAttributes";
+        private const string SOName = "SceneCollectionManagerSO";
+        private const string ResourcesPath = "Assets/Resources";
 
         private static ResetFieldOnExitPlayModeAttributeSO ResetFieldSO {
             get {
                 if (_resetFieldSO != null) return _resetFieldSO;
 
-                _resetFieldSO = AssetDatabase.LoadAssetAtPath<ResetFieldOnExitPlayModeAttributeSO>(SOPath);
+                _resetFieldSO = ScrubUtils
+                    .GetAllScrubsInResourceFolder<ResetFieldOnExitPlayModeAttributeSO>(SOFolder)
+                    .GetByName(SOName);
 
                 if (_resetFieldSO == null) {
                     var so = ScriptableObject.CreateInstance<ResetFieldOnExitPlayModeAttributeSO>();
+                
+                    var folderPath = Path.Join(ResourcesPath, SOFolder);
 
-                    AssetDatabase.CreateAsset(so, SOPath);
+                    if (!Directory.Exists(folderPath)) {
+                        Directory.CreateDirectory(folderPath);
+                    }
+
+                    var path = Path.Join(ResourcesPath, SOFolder, SOName) + ".asset";
+
+                    AssetDatabase.CreateAsset(so, path);
+                    Debug.Log($"{nameof(ResetFieldOnExitPlayModeAttributeSO)} file created");
 
                     _resetFieldSO = so;
-                    Debug.Log($"{nameof(ResetFieldOnExitPlayModeAttributeSO)} file created");
                 }
+                
+                Assert.IsNotNull(_resetFieldSO);
 
                 Debug.Log($"{nameof(ResetFieldOnExitPlayModeAttributeSO)} loaded manually");
 
@@ -134,6 +148,7 @@ namespace Attributes {
                             continue;
                     }
                     
+                    objectFields.FieldInfo.SetValue(scriptableObject, default);
                     objectFields.FieldInfo.SetValue(scriptableObject, objectFields.FieldValue);
                     Debug.Log(objectFields.FieldValue);
                 }
