@@ -53,14 +53,14 @@ namespace Attributes {
                     var path = Path.Join(ResourcesPath, SOFolder, SOName) + ".asset";
 
                     AssetDatabase.CreateAsset(so, path);
-                    Debug.Log($"{nameof(ResetFieldOnExitPlayModeAttributeSO)} file created");
+                    // Debug.Log($"{nameof(ResetFieldOnExitPlayModeAttributeSO)} file created");
 
                     _resetFieldSO = so;
                 }
                 
                 Assert.IsNotNull(_resetFieldSO);
 
-                Debug.Log($"{nameof(ResetFieldOnExitPlayModeAttributeSO)} loaded manually");
+                // Debug.Log($"{nameof(ResetFieldOnExitPlayModeAttributeSO)} loaded manually");
 
                 return _resetFieldSO;
             }
@@ -104,7 +104,7 @@ namespace Attributes {
                 switch (fieldValue) {
                     case ICloneable cloneableValue:
                         fieldValue = cloneableValue.Clone();
-                        Debug.Log("cloneable ");
+                        // Debug.Log("cloneable ");
                         break;
                     case IList list:
                         var elementType = list.GetType().GenericTypeArguments[0];
@@ -119,17 +119,17 @@ namespace Attributes {
                         
                         fieldValue = newList;
                         
-                        Debug.Log($"Cloned list of type {elementType} with {newList.Count} elements");
+                        // Debug.Log($"Cloned list of type {elementType} with {newList.Count} elements");
                         break;
                 }
 
                 ResetFieldSO.InitialState[scriptableObject]
                     .Add(new ScriptableObjectFields(field, fieldValue));
 
-                Debug.Log(fieldValue);
+                // Debug.Log(fieldValue);
             }
 
-            Debug.Log(LogPrefix + "Save Initial State | script count: " + ResetFieldSO.InitialState.Count);
+            // Debug.Log(LogPrefix + "Save Initial State | script count: " + ResetFieldSO.InitialState.Count);
         }
 
         private static void RestoreInitialState() {
@@ -145,20 +145,20 @@ namespace Attributes {
                                 list.Add(o);
                             }
 
-                            Debug.Log("restore list with " + list.Count);
+                            // Debug.Log("restore list with " + list.Count);
                             
                             continue;
                     }
                     
                     objectFields.FieldInfo.SetValue(scriptableObject, default);
                     objectFields.FieldInfo.SetValue(scriptableObject, objectFields.FieldValue);
-                    Debug.Log(objectFields.FieldValue);
+                    // Debug.Log(objectFields.FieldValue);
                 }
 
                 EditorUtility.SetDirty(scriptableObject);
             }
 
-            Debug.Log(LogPrefix + " Restore Initial State | script count:" + ResetFieldSO.InitialState.Count);
+            // Debug.Log(LogPrefix + " Restore Initial State | script count:" + ResetFieldSO.InitialState.Count);
 
             ResetFieldSO.InitialState.Clear();
         }

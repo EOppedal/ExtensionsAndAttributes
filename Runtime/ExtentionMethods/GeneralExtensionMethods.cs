@@ -32,9 +32,6 @@ namespace ExtensionMethods {
             return TimeSpan.FromSeconds(timeInSeconds).ToString(format);
         }
 
-        /// <summary>
-        /// Returns a random element from the list or array.
-        /// </summary>
         public static T GetRandom<T>(this IReadOnlyList<T> list) {
             return list[new Random().Next(0, list.Count)];
         }
@@ -63,9 +60,6 @@ namespace ExtensionMethods {
             return component;
         }
 
-        /// <summary>
-        /// Returns the current animation clip being played by the Animator
-        /// </summary>
         public static AnimationClip GetCurrentAnimationClip(this Animator animator) {
             return animator.GetCurrentAnimatorClipInfo(0)[0].clip;
         }
@@ -75,13 +69,26 @@ namespace ExtensionMethods {
             return JsonUtility.FromJson<T>(json);
         }
 
-        public static T ShallowClone<T>(this T source) {
+        public static T ShallowClone<T>(this T source) where T : class {
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (typeof(T).IsValueType) return source;
 
             const BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
             return (T)source.GetType().GetMethod("MemberwiseClone", bindingFlags)?.Invoke(source, null);
+        }
+
+        public static void CallFunctionAsDynamic(this object @class, string functionName, object param) {
+            var method = @class.GetType().GetMethod(functionName,
+                BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public,
+                null, new[] { param.GetType() }, null);
+
+            if (method != null) {
+                method.Invoke(@class, new[] { param });
+            }
+            else {
+                throw new ArgumentOutOfRangeException(nameof(param), $"No handler found for {param.GetType()}");
+            }
         }
     }
 }
