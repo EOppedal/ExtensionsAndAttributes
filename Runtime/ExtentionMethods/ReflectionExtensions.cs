@@ -33,5 +33,11 @@ namespace ExtensionMethods {
                 .Select(f => (T)f.GetValue(instance))
                 .ToArray();
         }
+
+        private static T GetFieldByNameAndType<T>(this object instance, string fieldName) {
+            var field = instance.GetType()
+                .GetField(fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            return field is T field1 ? field1 : default;
+        }
     }
 }
