@@ -1,16 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 using Random = System.Random;
 
 namespace ExtensionMethods {
     public static class GeneralExtensionMethods {
-        /// <summary>
-        /// Retrieves all immediate child GameObjects of a given Transform.
-        /// </summary>
-        /// <param name="parent">The parent Transform from which to get the immediate children.</param>
-        /// <returns>An array of GameObjects that are the immediate children of the specified parent Transform.</returns>
         public static IEnumerable<GameObject> GetImmediateChildren(this Transform parent) {
             var childCount = parent.childCount;
             var children = new GameObject[childCount];
@@ -22,12 +16,6 @@ namespace ExtensionMethods {
             return children;
         }
 
-        /// <summary>
-        /// Converts a time in seconds to a formatted string representation.
-        /// </summary>
-        /// <param name="timeInSeconds">The time in seconds to convert.</param>
-        /// <param name="format">The string format to use for the time representation.</param>
-        /// <returns>A string representing the time in the specified format.</returns>
         public static string ToStringTimeFormat(this float timeInSeconds, string format) {
             return TimeSpan.FromSeconds(timeInSeconds).ToString(format);
         }
@@ -67,28 +55,6 @@ namespace ExtensionMethods {
         public static T DeepClone<T>(this T source) {
             var json = JsonUtility.ToJson(source, true);
             return JsonUtility.FromJson<T>(json);
-        }
-
-        public static T ShallowClone<T>(this T source) where T : class {
-            if (source == null) throw new ArgumentNullException(nameof(source));
-            if (typeof(T).IsValueType) return source;
-
-            const BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-
-            return (T)source.GetType().GetMethod("MemberwiseClone", bindingFlags)?.Invoke(source, null);
-        }
-
-        public static void CallFunctionAsDynamic(this object @class, string functionName, object param) {
-            var method = @class.GetType().GetMethod(functionName,
-                BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public,
-                null, new[] { param.GetType() }, null);
-
-            if (method != null) {
-                method.Invoke(@class, new[] { param });
-            }
-            else {
-                throw new ArgumentOutOfRangeException(nameof(param), $"No handler found for {param.GetType()}");
-            }
         }
     }
 }

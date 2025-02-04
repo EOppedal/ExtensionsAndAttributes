@@ -163,46 +163,29 @@ namespace Attributes {
             ResetFieldSO.InitialState.Clear();
         }
 
-        private static IEnumerable<(ScriptableObject target, FieldInfo field)> GetAllResetFieldsOnExitPlayModeFields() {
+        private static (ScriptableObject obj, FieldInfo field)[] GetAllResetFieldsOnExitPlayModeFields() {
             const BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+            
+            var list = new List<(ScriptableObject, FieldInfo)>();
 
             foreach (var scriptableObject in GetAllScriptableObjects()) {
                 var objType = scriptableObject.GetType();
                 var obj = scriptableObject.ShallowClone();
-                var hasClassAttribute =
-                    objType.GetCustomAttributes(typeof(ResetFieldsOnExitPlayModeAttribute), true).Any();
+                var hasClassAttribute = objType.GetCustomAttributes(typeof(ResetFieldsOnExitPlayModeAttribute), true).Any();
 
                 foreach (var field in objType.GetFields(bindingFlags)) {
                     if (hasClassAttribute ||
                         field.GetCustomAttribute(typeof(ResetFieldOnExitPlayModeAttribute)) != null) {
-                        yield return (obj, field);
+                        list.Add((obj, field));
                     }
                 }
-
-                // var objType = obj.GetType();
-                //
-                // if (objType.GetCustomAttributes(typeof(ResetFieldsOnExitPlayModeAttribute), true).Any()) {
-                //     foreach (var field in objType.GetFields(bindingFlags)) {
-                //         yield return (obj, field);
-                //     }
-                // }
-                // else {
-                //     foreach (var field in objType.GetFields(bindingFlags).Where(field =>
-                //                  field.GetCustomAttribute(typeof(ResetFieldOnExitPlayModeAttribute)) != null)) {
-                //         yield return (obj, field);
-                //     }
-                // }
             }
+
+            return list.ToArray();
         }
 
         private static ScriptableObject[] GetAllScriptableObjects() {
             return Resources.FindObjectsOfTypeAll<ScriptableObject>();
-
-            // var assetGuids = AssetDatabase.FindAssets("t:ScriptableObject");
-            // return assetGuids
-            //     .Select(AssetDatabase.GUIDToAssetPath)
-            //     .Select(AssetDatabase.LoadAssetAtPath<ScriptableObject>)
-            //     .ToArray();
         }
     }
 #endif
