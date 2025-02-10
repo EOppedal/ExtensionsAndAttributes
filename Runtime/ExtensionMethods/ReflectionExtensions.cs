@@ -12,7 +12,7 @@ namespace ExtensionMethods {
 
             return (T)source.GetType().GetMethod("MemberwiseClone", bindingFlags)?.Invoke(source, null);
         }
-        
+
         public static void CallFunctionAsDynamic(this object @class, string functionName, object param) {
             var method = @class.GetType().GetMethod(functionName,
                 BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public,
@@ -35,9 +35,19 @@ namespace ExtensionMethods {
         }
 
         public static T GetFieldByNameAndType<T>(this object instance, string fieldName) {
-            var field = instance.GetType()
-                .GetField(fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            return field is T field1 ? field1 : default;
+            if (instance == null) throw new ArgumentNullException(nameof(instance));
+            if (string.IsNullOrEmpty(fieldName)) throw new ArgumentException("Field name cannot be null or empty", nameof(fieldName));
+
+            var instanceType = instance.GetType();
+            const BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+
+            var field = instanceType.GetField(fieldName, bindingFlags);
+
+            if (field == null || !typeof(T).IsAssignableFrom(field.FieldType)) {
+                return default;
+            }
+
+            return (T)field.GetValue(instance);
         }
     }
 }
