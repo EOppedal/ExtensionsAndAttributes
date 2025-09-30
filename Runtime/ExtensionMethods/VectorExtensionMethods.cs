@@ -7,7 +7,7 @@ namespace ExtensionMethods {
             return vector3 + new Vector3(x, y, z);
         }
 
-        public static Vector3 With(this ref Vector3 vector3, float? x = null, float? y = null, float? z = null) {
+        public static Vector3 With(this Vector3 vector3, float? x = null, float? y = null, float? z = null) {
             if (x.HasValue) vector3.x = x.Value;
             if (y.HasValue) vector3.y = y.Value;
             if (z.HasValue) vector3.z = z.Value;
@@ -31,6 +31,11 @@ namespace ExtensionMethods {
             if (y.HasValue) vector2.y = y.Value;
             return vector2;
         }
+        
+        public static void Set(this ref Vector2 vector2, float? x = null, float? y = null) {
+            if (x.HasValue) vector2.x = x.Value;
+            if (y.HasValue) vector2.y = y.Value;
+        }
         #endregion
 
         #region ---Quaternion---
@@ -43,13 +48,19 @@ namespace ExtensionMethods {
             return quaternion;
         }
 
-        public static Quaternion With(this Quaternion quaternion, float? x = null, float? y = null, float? z = null,
-            float? w = null) {
+        public static Quaternion With(this Quaternion quaternion, float? x = null, float? y = null, float? z = null, float? w = null) {
             if (x.HasValue) quaternion.x = x.Value;
             if (y.HasValue) quaternion.y = y.Value;
             if (z.HasValue) quaternion.z = z.Value;
             if (w.HasValue) quaternion.w = w.Value;
             return quaternion;
+        }
+        
+        public static void Set(this ref Quaternion quaternion, float? x = null, float? y = null, float? z = null, float? w = null) {
+            if (x.HasValue) quaternion.x = x.Value;
+            if (y.HasValue) quaternion.y = y.Value;
+            if (z.HasValue) quaternion.z = z.Value;
+            if (w.HasValue) quaternion.w = w.Value;
         }
         #endregion
     }
