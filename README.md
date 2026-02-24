@@ -1,16 +1,34 @@
 # UnityUtils 
 Code and SO utils for unity. 
 ## Features 
-  - [Extention Methods](##)
-  - [Attributes](##)
-  - [Enum Dictionary](##EnumDictionary)
-  - [Singletons](##Singletons)
-  - [Consensus](##)
-  - [Serializers](##Serializers)
-  - [ScrubGlobalData](##)
-  - [Runtime Set](##)
-  - [Service Locator](##)
-  - [Observable](##)
+  - [Extention Methods](#extention-methods)
+  - [Attributes](#attributes)
+  - [Enum Dictionary](#enum-dictionary)
+  - [Singletons](#singletons)
+  - [Consensus](#consensus)
+  - [Serializers](#serializers)
+  - [ScrubGlobalData](#scrubglobaldata)
+  - [Runtime Set](#runtime-set)
+  - [Service Locator](#service-locator)
+  - [Observable](#observable)
+
+## Extention Methods  
+<details>
+  
+  ### Example
+```csharp
+
+```
+</details>
+
+## Attributes
+<details>
+  
+  ### Example
+```csharp
+
+```
+</details>
 
 ## Enum Dictionary 
 <details> 
@@ -33,5 +51,68 @@ var myEnumDictionary = new EnumDictionary<MyEnum, int>{
     [MyEnum.item1] = item1Value, 
     [MyEnum.item2] = item2Value
 };
+```
+</details>
+
+## Singletons
+<details>
+  
+  ### Example
+```csharp
+
+```
+</details>
+
+## Consensus
+<details>
+  
+  ### Example
+```csharp
+
+```
+</details>
+
+## Serializers
+<details>
+  
+  ### Example
+```csharp
+
+```
+</details>
+
+## ScrubGlobalData
+<details>
+  
+  ### Example
+```csharp
+
+```
+</details>
+
+## Runtime Set
+<details>
+  
+  ### Example
+```csharp
+
+```
+</details>
+
+## Service Locator
+<details>
+  
+  ### Example
+```csharp
+
+```
+</details>
+
+## Observable
+<details>
+  
+  ### Example
+```csharp
+
 ```
 </details>
