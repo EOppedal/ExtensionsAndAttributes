@@ -1,12 +1,9 @@
 {
-  "name": "com.erlend-eiken-oppedal.extensions-and-attributes",
-  "version": "1.0.0",
-  "displayName": "Extensions And Attributes",
+  "name": "com.erlend-eiken-oppedal.unity-utils",
+  "version": "1.1.0",
+  "displayName": "UnityUtils",
   "author": {
     "name": "Erlend Eiken Oppedal",
     "email": "erlend.oppedal@gmail.com"
-  },
-  "dependencies": {
-    "com.unity.inputsystem": "1.14.0"
   }
 }
