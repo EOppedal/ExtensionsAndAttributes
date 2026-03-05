@@ -1,5 +1,5 @@
 # UnityUtils 
-Code and SO utils for unity. 
+Codeing utils for unity. 
 ## Features 
   - [Extention Methods](#extention-methods)
   - [Attributes](#attributes)
@@ -15,10 +15,45 @@ Code and SO utils for unity.
 
 ## Extention Methods  
 <details>
-  
-  ### Example
-```csharp
+  <summary>General Extentions</summary>
 
+```csharp
+// Some examples of code usage
+
+var componentReference = this.GetOrAdd<TComponent>();
+
+var shuffledList = new List<int> { 1, 2, 3, 4 };
+shuffledList.Shuffle();
+var newList = shuffledList.Shuffled();
+
+var randomFromList = newList.GetRandom();
+
+var immediateChildren = transform.GetImmediateChildren();
+var immediateChildrenTransforms = transform.GetImmediateChildrenTransforms();
+```
+
+</details>
+<details>
+  <summary>Vector Extentions</summary>
+  
+  ```csharp
+// All of these work with Vector3 and Quaternion
+
+var vector = new Vector2(1, 2);
+vector.Set(x: 2);
+var offsetVector = vector.WithOffset(x: 2);
+var newVector = vector.With(y: 5);
+```
+
+</details>
+<details>
+  <summary>Reflection Extentions</summary>
+
+  ```csharp
+// Some examples of code usage
+
+var allInts = this.GetFieldsOfType<int>();
+var healthInt = this.GetFieldByNameAndType<int>("Health");
 ```
 </details>
 
@@ -26,6 +61,7 @@ Code and SO utils for unity.
 <details>
   
   ### Example
+
 ```csharp
 
 ```
@@ -42,6 +78,7 @@ Code and SO utils for unity.
   - Only index-assignment syntax '[Enum.Member] = value' is supported
 
   ### Example
+
 ```csharp
 public enum MyEnum { item1, item2 }
 
@@ -59,6 +96,7 @@ var myEnumDictionary = new EnumDictionary<MyEnum, int>{
 <details>
   
   ### Example
+
 ```csharp
 
 ```
