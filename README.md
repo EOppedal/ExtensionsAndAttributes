@@ -17,7 +17,7 @@
   <summary>General Extentions</summary>
 
 ```csharp
-// Some examples of code usage
+// Only Some Examples
 
 var componentReference = this.GetOrAdd<TComponent>();
 
@@ -36,7 +36,7 @@ var immediateChildrenTransforms = transform.GetImmediateChildrenTransforms();
   <summary>Vector Extentions</summary>
   
   ```csharp
-// All of these work with Vector3 and Quaternion
+// All Of These Work With Vector3 And Quaternion
 
 var vector = new Vector2(1, 2);
 vector.Set(x: 2);
@@ -49,7 +49,7 @@ var newVector = vector.With(y: 5);
   <summary>Reflection Extentions</summary>
 
   ```csharp
-// Some examples of code usage
+// Only Some Examples
 
 var allInts = this.GetFieldsOfType<int>();
 var healthInt = this.GetFieldByNameAndType<int>("Health");
@@ -76,14 +76,14 @@ var healthInt = this.GetFieldByNameAndType<int>("Health");
 [CreateAssetMenu(fileName = nameof(Test1), menuName = "Scriptable Objects/Create " + nameof(Test1))]
 public class Test1 : ScriptableObject {
     // Resets Changes Done To Field Of Scriptable Object In Play Mode
-    [ResetFieldOnExitPlayMode] public float Health;
+    [ResetFieldOnExitPlayMode] public float health;
 }
 
 // Resets Changes Done To Entire Scriptable Object In Play Mode
 [CreateAssetMenu(fileName = nameof(Test2), menuName = "Scriptable Objects/Create " + nameof(Test2))]
 [ResetFieldsOnExitPlayMode]
 public class Test2 : ScriptableObject {
-    public float Health;
+    public float health;
 }
 ```
 </details>
