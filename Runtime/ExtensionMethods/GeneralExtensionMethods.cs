@@ -51,6 +51,11 @@ namespace ExtensionMethods {
             }
         }
 
+        public static List<T> Shuffled<T>(this List<T> list) {
+            list.Shuffle();
+            return list;
+        }
+
 
         public static T GetOrAdd<T>(this MonoBehaviour monoBehaviour) where T : Component {
             return monoBehaviour.TryGetComponent<T>(out var component)
@@ -77,7 +82,10 @@ namespace ExtensionMethods {
         }
         
         public static void SetPosition(this Transform transform, float? x = null, float? y = null, float? z = null) {
-            transform.position = new Vector3(x ?? transform.position.x, y ?? transform.position.y, z ?? transform.position.z);
+            transform.position = new Vector3(
+                x ?? transform.position.x, 
+                y ?? transform.position.y, 
+                z ?? transform.position.z);
         }
     }
 }
