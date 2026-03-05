@@ -62,7 +62,29 @@ var healthInt = this.GetFieldByNameAndType<int>("Health");
   ### Example
 
 ```csharp
+// Adds The Asset Preview Of A Reference To The Inspector
+[AssetPreviewIcon] public Sprite sprite;
 
+// Gets Or Adds A Component On The Object On Validation And Saves It In The Serialization Of Tho Object
+// NB! Must Be Serialized, But Can Be Hidden In The Inspector
+[GetOrAddComponent, HideInInspector] public Script1 script1;
+[GetOrAddComponent, SerializeField, HideInInspector] private Script2 script2;
+
+// Must Be Not Null Or Default Value
+[Required] public GameObject prefab;
+
+[CreateAssetMenu(fileName = nameof(Test1), menuName = "Scriptable Objects/Create " + nameof(Test1))]
+public class Test1 : ScriptableObject {
+    // Resets Changes Done To Field Of Scriptable Object In Play Mode
+    [ResetFieldOnExitPlayMode] public float Health;
+}
+
+// Resets Changes Done To Entire Scriptable Object In Play Mode
+[CreateAssetMenu(fileName = nameof(Test2), menuName = "Scriptable Objects/Create " + nameof(Test2))]
+[ResetFieldsOnExitPlayMode]
+public class Test2 : ScriptableObject {
+    public float Health;
+}
 ```
 </details>
 
