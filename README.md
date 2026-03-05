@@ -94,11 +94,22 @@ var myEnumDictionary = new EnumDictionary<MyEnum, int>{
 
 ## Singletons
 <details>
-  
-  ### Example
 
 ```csharp
+// Create A Manager
+// Singleton Inherits From Monobehaviour
+// A PersistentSingleton Will Put The Object In DontDestroyOnLoad
+// A LazyLoad Will Automatically Create Itself When Requested If No Instance Exists
+public class GameManager : Singleton<GameManager> {
+    public int score = 0;
+}
 
+public class Player : MonoBehaviour {
+    private void Start() {
+        // Call On The Static Instance Reference From Anywhere
+        GameManager.Instance.score += 10;
+    }
+}
 ```
 </details>
 
