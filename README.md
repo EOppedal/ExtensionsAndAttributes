@@ -158,14 +158,18 @@ var deSerialized = serializer.Deserialize<TestMonobehaviour>(serialized);
 
 ## ScrubGlobalData
 <details>
-Generic And Concrete Scriptable Objects U Can Create To Hold Global Data. These Scriptable Objects Use The Attribute [ResetFieldsOnExitPlayMode] To Reset Data After Exiting Play Mode In The Editor
+Generic And Concrete Scriptable Objects U Can Create To Hold Global Data. These Scriptable Objects Use The Attribute [ResetFieldsOnExitPlayMode] To Reset Data After Exiting Play Mode In The Editor. U Can Find These In The Create Asset Menu "Scriptable Objects/GlobalData/"
 </details>
 
 ## Service Locator
 <details>
 
 ```csharp
+// Register A Global Service
+ServiceLocator.Register(this);
 
+// Get A Global Service
+var service = ServiceLocator.Get<TestMonobehaviour>();
 ```
 </details>
 
