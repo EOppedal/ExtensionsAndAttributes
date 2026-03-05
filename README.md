@@ -1,5 +1,4 @@
 # UnityUtils 
-Codeing utils for unity. 
 ## Features 
   - [Extention Methods](#extention-methods)
   - [Attributes](#attributes)
@@ -124,11 +123,15 @@ public class Player : MonoBehaviour {
 
 ## Serializers
 <details>
-  
-  ### Example
-```csharp
 
+```csharp
+// JSON And XML Serializers Available
+
+var serializer = new JSONSerializer();
+var serialized = serializer.Serialize(this); // String To Be Saved To A File
+var deSerialized = serializer.Deserialize<TestMonobehaviour>(serialized);
 ```
+
 </details>
 
 ## ScrubGlobalData
