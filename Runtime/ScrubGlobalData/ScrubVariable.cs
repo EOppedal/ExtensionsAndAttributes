@@ -1,5 +1,4 @@
-﻿using Attributes;
-using UnityEngine;
+﻿using UnityEngine;
 
 [ResetFieldsOnExitPlayMode]
 public abstract class ScrubVariable<T> : ScriptableObject {
