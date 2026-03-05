@@ -139,7 +139,26 @@ public class Player : MonoBehaviour {
   
   ### Example
 ```csharp
+// Create A Vote For An Object
+var vote1 = new ScriptVotePair();
+var vote2 = new ScriptVotePair { vote = true };
 
+// Create A Consensus And Add Votes
+// Premade Consensus Options Include: AtLeastOneInFavourConsensus, AllInFavourConsensus And MajorityInFavourConsensus.
+var keepGamePaused = new AtLeastOneInFavourConsensus();
+keepGamePaused.AddVote(vote1);
+keepGamePaused.AddVote(vote2);
+
+// An Event Will Run When Sombody Changes Their Vote
+keepGamePaused.OnVoteChange += b => Debug.Log("Should Game Be Paused: " + b);
+
+// How To Change A Vote
+vote1.vote = true;
+vote2.vote = false;
+vote1.vote = false;
+
+// Check The Consensus For Result
+var isPaused = keepGamePaused.consensus;
 ```
 </details>
 
