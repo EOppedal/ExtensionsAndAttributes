@@ -131,8 +131,7 @@ var myEnumDictionary = new EnumDictionary<MyEnum, int>{
 
 ## Runtime Set
 <details>
-  
-  ### Example
+
 ```csharp
 
 ```
@@ -140,8 +139,7 @@ var myEnumDictionary = new EnumDictionary<MyEnum, int>{
 
 ## Service Locator
 <details>
-  
-  ### Example
+
 ```csharp
 
 ```
@@ -149,19 +147,67 @@ var myEnumDictionary = new EnumDictionary<MyEnum, int>{
 
 ## Observable
 <details>
-  
-  ### Example
+
 ```csharp
 
 ```
+
 </details>
 
 
 ## Visitor
 <details>
-  
-  ### Example
-```csharp
 
+```csharp
+// Create An Interface For Objects That Are Interactable
+public interface IInteractableObject : IVisitable { }
+// Create An Interface For Objects That Can Interact With Them
+public interface IInteractableObjectVisitor : IVisitor<IInteractableObject> { }
+
+// Interactable Classes Need To Be Partial
+// Boilerplate Code Is Made By Source Genereator
+public partial class PostBox : MonoBehaviour, IInteractableObject {
+    public bool isBroken;
+}
+
+public partial class Door : MonoBehaviour, IInteractableObject {
+    public bool isOpen;
+}
+
+// Interacting Classes Need To Be Partial
+// Boilerplate Code Is Made By Source Genereator
+public partial class Screwdriver : MonoBehaviour, IInteractableObjectVisitor {
+  // Create  Methods (Named "Visit") Where The Parameter Is the Interactable Object You Want To Handle With Custom Code
+  public void Visit(PostBox postBox) {
+      if (postBox.isBroken) {
+          Debug.Log("I can fix this");
+          postBox.isBroken = false;
+      }
+      else {
+          Debug.Log("There's no need to fix this");
+      }
+  }
+
+  // Add More Methods For Adding Specific Logic For Object Interacton For This Object Interactor
+  public void Visit(Door door) {
+      door.isOpen = !door.isOpen;
+  }
+
+  // If No Specific Logic For Interactable Object Exists
+  public void DefaultVisit(IInteractableObject visitable) {
+      Debug.Log("I don't need to screw this " + visitable);
+  }
+}
+
+// Example User Of The Interacting Object
+public class Player : MonoBehaviour {
+    public IInteractableObjectVisitor equipedInteractor;
+    public IInteractableObject selectedInteractableObject;
+
+    private void Start() {
+        equipedInteractor.Visit(selectedInteractableObject);
+    }
+}
 ```
+
 </details>
