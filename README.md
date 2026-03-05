@@ -185,7 +185,16 @@ var deSerialized = serializer.Deserialize<TestMonobehaviour>(serialized);
 <details>
 
 ```csharp
+// Generic Observable With OnValueChanged Event
+var score =  new Observable<int>(2);
+score.OnValueChanged += x => Debug.Log(x);
 
+// Float Observable Clamped Between Values With Extra Events And Operators 
+var health = new ClampedFloat(0, 5, 5);
+health.OnDecreaseValue += f => Debug.Log(f + " damage taken");
+health.OnIncreaseValue += f => Debug.Log(f + " health points healed");
+health -= 1;
+health += 1;
 ```
 
 </details>
