@@ -1,5 +1,4 @@
 # UnityUtils 
-Code and SO utils for unity. 
 ## Features 
   - [Extention Methods](#extention-methods)
   - [Attributes](#attributes)
@@ -15,10 +14,45 @@ Code and SO utils for unity.
 
 ## Extention Methods  
 <details>
-  
-  ### Example
-```csharp
+  <summary>General Extentions</summary>
 
+```csharp
+// Some examples of code usage
+
+var componentReference = this.GetOrAdd<TComponent>();
+
+var shuffledList = new List<int> { 1, 2, 3, 4 };
+shuffledList.Shuffle();
+var newList = shuffledList.Shuffled();
+
+var randomFromList = newList.GetRandom();
+
+var immediateChildren = transform.GetImmediateChildren();
+var immediateChildrenTransforms = transform.GetImmediateChildrenTransforms();
+```
+
+</details>
+<details>
+  <summary>Vector Extentions</summary>
+  
+  ```csharp
+// All of these work with Vector3 and Quaternion
+
+var vector = new Vector2(1, 2);
+vector.Set(x: 2);
+var offsetVector = vector.WithOffset(x: 2);
+var newVector = vector.With(y: 5);
+```
+
+</details>
+<details>
+  <summary>Reflection Extentions</summary>
+
+  ```csharp
+// Some examples of code usage
+
+var allInts = this.GetFieldsOfType<int>();
+var healthInt = this.GetFieldByNameAndType<int>("Health");
 ```
 </details>
 
@@ -26,6 +60,7 @@ Code and SO utils for unity.
 <details>
   
   ### Example
+
 ```csharp
 
 ```
@@ -42,6 +77,7 @@ Code and SO utils for unity.
   - Only index-assignment syntax '[Enum.Member] = value' is supported
 
   ### Example
+
 ```csharp
 public enum MyEnum { item1, item2 }
 
@@ -57,10 +93,22 @@ var myEnumDictionary = new EnumDictionary<MyEnum, int>{
 
 ## Singletons
 <details>
-  
-  ### Example
-```csharp
 
+```csharp
+// Create A Manager
+// Singleton Inherits From Monobehaviour
+// A PersistentSingleton Will Put The Object In DontDestroyOnLoad
+// A LazyLoad Will Automatically Create Itself When Requested If No Instance Exists
+public class GameManager : Singleton<GameManager> {
+    public int score = 0;
+}
+
+public class Player : MonoBehaviour {
+    private void Start() {
+        // Call On The Static Instance Reference From Anywhere
+        GameManager.Instance.score += 10;
+    }
+}
 ```
 </details>
 
@@ -75,11 +123,15 @@ var myEnumDictionary = new EnumDictionary<MyEnum, int>{
 
 ## Serializers
 <details>
-  
-  ### Example
-```csharp
 
+```csharp
+// JSON And XML Serializers Available
+
+var serializer = new JSONSerializer();
+var serialized = serializer.Serialize(this); // String To Be Saved To A File
+var deSerialized = serializer.Deserialize<TestMonobehaviour>(serialized);
 ```
+
 </details>
 
 ## ScrubGlobalData
@@ -93,8 +145,7 @@ var myEnumDictionary = new EnumDictionary<MyEnum, int>{
 
 ## Runtime Set
 <details>
-  
-  ### Example
+
 ```csharp
 
 ```
@@ -102,8 +153,7 @@ var myEnumDictionary = new EnumDictionary<MyEnum, int>{
 
 ## Service Locator
 <details>
-  
-  ### Example
+
 ```csharp
 
 ```
@@ -111,19 +161,67 @@ var myEnumDictionary = new EnumDictionary<MyEnum, int>{
 
 ## Observable
 <details>
-  
-  ### Example
+
 ```csharp
 
 ```
+
 </details>
 
 
 ## Visitor
 <details>
-  
-  ### Example
-```csharp
 
+```csharp
+// Create An Interface For Objects That Are Interactable
+public interface IInteractableObject : IVisitable { }
+// Create An Interface For Objects That Can Interact With Them
+public interface IInteractableObjectVisitor : IVisitor<IInteractableObject> { }
+
+// Interactable Classes Need To Be Partial
+// Boilerplate Code Is Made By Source Genereator
+public partial class PostBox : MonoBehaviour, IInteractableObject {
+    public bool isBroken;
+}
+
+public partial class Door : MonoBehaviour, IInteractableObject {
+    public bool isOpen;
+}
+
+// Interacting Classes Need To Be Partial
+// Boilerplate Code Is Made By Source Genereator
+public partial class Screwdriver : MonoBehaviour, IInteractableObjectVisitor {
+  // Create  Methods (Named "Visit") Where The Parameter Is the Interactable Object You Want To Handle With Custom Code
+  public void Visit(PostBox postBox) {
+      if (postBox.isBroken) {
+          Debug.Log("I can fix this");
+          postBox.isBroken = false;
+      }
+      else {
+          Debug.Log("There's no need to fix this");
+      }
+  }
+
+  // Add More Methods For Adding Specific Logic For Object Interacton For This Object Interactor
+  public void Visit(Door door) {
+      door.isOpen = !door.isOpen;
+  }
+
+  // If No Specific Logic For Interactable Object Exists
+  public void DefaultVisit(IInteractableObject visitable) {
+      Debug.Log("I don't need to screw this " + visitable);
+  }
+}
+
+// Example User Of The Interacting Object
+public class Player : MonoBehaviour {
+    public IInteractableObjectVisitor equipedInteractor;
+    public IInteractableObject selectedInteractableObject;
+
+    private void Start() {
+        equipedInteractor.Visit(selectedInteractableObject);
+    }
+}
 ```
+
 </details>
