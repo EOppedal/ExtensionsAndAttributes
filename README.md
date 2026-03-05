@@ -165,14 +165,6 @@ var deSerialized = serializer.Deserialize<TestMonobehaviour>(serialized);
 ```
 </details>
 
-## Runtime Set
-<details>
-
-```csharp
-
-```
-</details>
-
 ## Service Locator
 <details>
 
@@ -195,6 +187,10 @@ health.OnDecreaseValue += f => Debug.Log(f + " damage taken");
 health.OnIncreaseValue += f => Debug.Log(f + " health points healed");
 health -= 1;
 health += 1;
+
+// Observable List
+var enemies = new RuntimeSet<GameObject>();
+enemies.Add(prefab);
 ```
 
 </details>
